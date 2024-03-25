@@ -21,7 +21,7 @@
    <children>
       <Button mnemonicParsing="false" prefHeight="65.0" prefWidth="216.0" text="Login"
          GridPane.columnIndex="1" GridPane.rowIndex="2" onAction="#handleLoginButtonClicked" fx:id="loginButton"/>
-      <TextField text="Username" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+      <TextField text="Username" GridPane.columnIndex="1" GridPane.rowIndex="1" fx:id="usernameField"/>
       <Label text="Photos" GridPane.columnIndex="1">
          <font>
             <Font size="64.0" />
