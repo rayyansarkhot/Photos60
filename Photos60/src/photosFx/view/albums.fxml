@@ -20,7 +20,7 @@
       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
    </rowConstraints>
    <children>
-      <TableView prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
+      <TableView fx:id="tableView" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
          <columns>
             <TableColumn prefWidth="200.0" text="Name" />
             <TableColumn minWidth="0.0" prefWidth="200.0" text="# of Photos" />

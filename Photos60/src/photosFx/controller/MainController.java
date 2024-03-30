@@ -29,7 +29,7 @@ public class MainController {
     @FXML
     private void handleLoginButtonClicked() {
         try {
-            String username = usernameField.getText(); // Retrieve text from TextField
+            AlbumsController.username = usernameField.getText(); // Retrieve text from TextField
 
             // Load the FXML file for the new scene
             FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/albums.fxml"));
@@ -42,50 +42,9 @@ public class MainController {
             Stage stage = (Stage) loginButton.getScene().getWindow();
             stage.setScene(secondScene);
 
-            Content content;
-            if (userExists(username)) {
-                try {
-                    FileInputStream fileIn = new FileInputStream("src/photosFx/model/users"+ username + ".dat");
-                    ObjectInputStream in = new ObjectInputStream(fileIn);
-                    content = (Content) in.readObject();
-                    in.close();
-                    fileIn.close();
-
-                    // Now you can use the deserializedContent object
-                    List<Album> albums = content.albums;
-                    System.out.println(albums);
-
-                } catch (IOException | ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                content = new Content();
-            }
-
-            /*
-             *
-             * Need to now display the data in content, i.e. the album info, on the table itself
-             */
-
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public boolean userExists(String name) {
-
-        String directoryPath = "src/photosFx/model/users";
-        String fileName = name.toLowerCase() + ".dat";
-        File directory = new File(directoryPath);
-        File file = new File(directory, fileName);
-
-        // Check if the file exists
-        if (file.exists()) {
-            System.out.println("file exists.");
-            return true;
-        } else {
-            return false;
-        }
-
-    }
 }

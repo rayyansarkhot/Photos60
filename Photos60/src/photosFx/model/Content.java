@@ -1,12 +1,28 @@
 package photosFx.model;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.io.Serializable;
 
-public class Content {
+public class Content implements Serializable{
 
     public List<Album> albums;
-    public Content(){
+
+    public Content() {
+        albums = new ArrayList<Album>(); // Initialize the list
         albums.add(new Album("RAYYAN"));
+        albums.add(new Album("SHAYAN"));
+
+    }
+
+    public List<String> getAlbumNames() {
+
+        List<String> albumNames = new ArrayList<>();
+        for(Album alb: albums) {
+            albumNames.add(alb.name);
+        }
+
+        return albumNames;
     }
 
 }
