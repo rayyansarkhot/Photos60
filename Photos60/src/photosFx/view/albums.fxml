@@ -44,7 +44,8 @@
             <Button mnemonicParsing="false" text="Rename album" GridPane.columnIndex="1"
                GridPane.halignment="CENTER" GridPane.rowIndex="1" />
             <Button mnemonicParsing="false" text="Create album" GridPane.columnIndex="1"
-               GridPane.halignment="CENTER" />
+               GridPane.halignment="CENTER" onAction="#handleCreateAlbumButtonClicked"
+               fx:id="createAlbumButton" />
             <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false"
                text="Open album" GridPane.halignment="CENTER" />
          </children>

@@ -6,9 +6,12 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.TextInputDialog;
+import java.util.Optional;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -25,16 +28,18 @@ import photosFx.model.Content;
 public class AlbumsController implements Initializable {
 
     public static String username = "";
+    public Content content;
 
     @FXML
     private Button logoutButton;
+    @FXML
+    private Button createAlbumButton;
+
     @FXML
     private TableView<Album> tableView;
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // This method will be called when the FXML file is loaded
-
-        Content content;
         if (userExists(username)) {
             try {
                 content = ContentSerializer.loadContent(username);
@@ -58,6 +63,8 @@ public class AlbumsController implements Initializable {
 
     private void displayData(List<Album> albums) {
 
+        tableView.getItems().clear();
+
         // Retrieve the existing TableColumn from the TableView
         TableColumn<Album, String> nameColumn = (TableColumn<Album, String>) tableView.getColumns().get(0);
         TableColumn<Album, String> numPhotosColumn = (TableColumn<Album, String>) tableView.getColumns().get(1);
@@ -67,12 +74,17 @@ public class AlbumsController implements Initializable {
         // Set up cell value factory to extract the name from the Album object
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         numPhotosColumn.setCellValueFactory(new PropertyValueFactory<>("numPhotos"));
-        // earliestPhotoColumn.setCellValueFactory(new PropertyValueFactory<>("earliestPhoto"));
-        // latestPhotoColumn.setCellValueFactory(new PropertyValueFactory<>("latestPhoto"));
+        // earliestPhotoColumn.setCellValueFactory(new
+        // PropertyValueFactory<>("earliestPhoto"));
+        // latestPhotoColumn.setCellValueFactory(new
+        // PropertyValueFactory<>("latestPhoto"));
 
         // Add data to the TableView
         tableView.getItems().addAll(albums);
 
+//
+//  THIS DOESNT WIPE AWAY OLD ENTRIES WHEN NEW ENTRIES ARE ADDED.
+//
     }
 
     public boolean userExists(String name) {
@@ -90,6 +102,28 @@ public class AlbumsController implements Initializable {
             return false;
         }
 
+    }
+
+    @FXML
+    private void handleCreateAlbumButtonClicked() {
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Enter Album Name");
+        dialog.setHeaderText(null);
+        dialog.setContentText("Please enter the album name:");
+
+        Optional<String> result = dialog.showAndWait();
+
+        result.ifPresent(albumName -> {
+            // Handle the entered album name here
+            String enteredText = result.get();
+            content.albums.add(new Album(enteredText));
+            displayData(content.albums);
+            try {
+                ContentSerializer.saveContent(content, username);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     @FXML
