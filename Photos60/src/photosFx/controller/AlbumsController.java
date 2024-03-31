@@ -17,6 +17,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -34,6 +36,10 @@ public class AlbumsController implements Initializable {
     private Button logoutButton;
     @FXML
     private Button createAlbumButton;
+    @FXML
+    private Button deleteAlbumButton;
+    @FXML
+    private Button renameAlbumButton;
 
     @FXML
     private TableView<Album> tableView;
@@ -82,9 +88,9 @@ public class AlbumsController implements Initializable {
         // Add data to the TableView
         tableView.getItems().addAll(albums);
 
-//
-//  THIS DOESNT WIPE AWAY OLD ENTRIES WHEN NEW ENTRIES ARE ADDED.
-//
+        //
+        // THIS DOESNT WIPE AWAY OLD ENTRIES WHEN NEW ENTRIES ARE ADDED.
+        //
     }
 
     public boolean userExists(String name) {
@@ -105,7 +111,51 @@ public class AlbumsController implements Initializable {
     }
 
     @FXML
+    private void handleRenameAlbumButtonClicked() {
+        Album selectedAlbum = tableView.getSelectionModel().getSelectedItem();
+        if (selectedAlbum != null) {
+            TextInputDialog dialog = new TextInputDialog();
+            dialog.setTitle("Enter new Album Name for " + selectedAlbum.getName());
+            dialog.setHeaderText("Rename");
+            dialog.setContentText("Please enter the new album name:");
+
+            Optional<String> result = dialog.showAndWait();
+
+            result.ifPresent(albumName -> {
+                // Handle the entered album name here
+                String enteredText = result.get().toUpperCase().strip();
+
+
+                if (content.getAlbumNames().contains(enteredText) || enteredText.equals("")) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Empty album name not allowed!");
+                    alert.showAndWait();
+                    return;
+                }
+
+                selectedAlbum.setName(enteredText.toUpperCase());
+                displayData(content.albums);
+                try {
+                    ContentSerializer.saveContent(content, username);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+        } else {
+            // Show message popup indicating no album is selected
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("No album selected. Please select an album to rename.");
+            alert.showAndWait();
+        }
+    }
+
+    @FXML
     private void handleCreateAlbumButtonClicked() {
+
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Enter Album Name");
         dialog.setHeaderText(null);
@@ -115,8 +165,18 @@ public class AlbumsController implements Initializable {
 
         result.ifPresent(albumName -> {
             // Handle the entered album name here
-            String enteredText = result.get();
-            content.albums.add(new Album(enteredText));
+            String enteredText = result.get().toUpperCase().strip();
+
+            if (content.getAlbumNames().contains(enteredText) || enteredText.equals("")) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText(null);
+                alert.setContentText("Empty album name not allowed!");
+                alert.showAndWait();
+                return;
+            }
+
+            content.albums.add(new Album(enteredText.toUpperCase()));
             displayData(content.albums);
             try {
                 ContentSerializer.saveContent(content, username);
@@ -124,6 +184,46 @@ public class AlbumsController implements Initializable {
                 e.printStackTrace();
             }
         });
+    }
+
+    @FXML
+    private void handleDeleteAlbumButtonClicked() {
+        Album selectedAlbum = tableView.getSelectionModel().getSelectedItem();
+        if (selectedAlbum != null) {
+            // Delete the selected album
+            String deletedAlbumName = deleteAlbum(selectedAlbum);
+
+            // Show message popup indicating album is deleted
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Confirmation");
+            alert.setHeaderText(null);
+            alert.setContentText(deletedAlbumName + " Album deleted successfully.");
+            alert.showAndWait();
+
+        } else {
+            // Show message popup indicating no album is selected
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("No album selected. Please select an album to delete.");
+            alert.showAndWait();
+        }
+    }
+
+    private String deleteAlbum(Album selectedAlbum) {
+
+        String name = selectedAlbum.getName();
+        content.albums.remove(selectedAlbum);
+        displayData(content.albums);
+
+        try {
+            ContentSerializer.saveContent(content, username);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return name;
+
     }
 
     @FXML

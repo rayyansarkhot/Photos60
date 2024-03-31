@@ -40,9 +40,11 @@
          </rowConstraints>
          <children>
             <Button mnemonicParsing="false" text="Delete album" GridPane.halignment="CENTER"
-               GridPane.rowIndex="1" />
+               GridPane.rowIndex="1" onAction="#handleDeleteAlbumButtonClicked"
+               fx:id="deleteAlbumButton" />
             <Button mnemonicParsing="false" text="Rename album" GridPane.columnIndex="1"
-               GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+               GridPane.halignment="CENTER" GridPane.rowIndex="1"
+               onAction="#handleRenameAlbumButtonClicked" fx:id="renameButton" />
             <Button mnemonicParsing="false" text="Create album" GridPane.columnIndex="1"
                GridPane.halignment="CENTER" onAction="#handleCreateAlbumButtonClicked"
                fx:id="createAlbumButton" />

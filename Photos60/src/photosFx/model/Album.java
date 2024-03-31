@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Album implements Serializable{
+public class Album implements Serializable {
     public String name;
     public int numPhotos;
     // public List<Photo> photos;
@@ -20,17 +20,20 @@ public class Album implements Serializable{
         return name;
     }
 
+    public void setName(String newName) {
+        name = newName;
+    }
+
     public int getNumPhotos() {
         return numPhotos;
     }
     // Add methods to manipulate photos within the album
     // public void addPhoto(Photo photo) {
-    //     photos.add(photo);
+    // photos.add(photo);
     // }
 
     // public List<Photo> getPhotos() {
-    //     return photos;
+    // return photos;
     // }
-
 
 }
