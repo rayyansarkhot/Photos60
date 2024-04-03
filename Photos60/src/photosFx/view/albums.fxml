@@ -49,7 +49,8 @@
                GridPane.halignment="CENTER" onAction="#handleCreateAlbumButtonClicked"
                fx:id="createAlbumButton" />
             <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false"
-               text="Open album" GridPane.halignment="CENTER" />
+               text="Open album" GridPane.halignment="CENTER"
+               onAction="#openAlbum" fx:id="openAlbumButton"/>
          </children>
       </GridPane>
       <GridPane>

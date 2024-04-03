@@ -41,6 +41,8 @@ public class AlbumsController implements Initializable {
     @FXML
     private Button renameAlbumButton;
     @FXML
+    private Button openAlbumButton;
+    @FXML
     private TableView<Album> tableView;
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -231,6 +233,25 @@ public class AlbumsController implements Initializable {
 
         return name;
 
+    }
+
+    @FXML
+    private void openAlbum() {
+        try {
+            // Load the FXML file for the new scene
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/photogrid.fxml"));
+            Parent secondSceneRoot = loader.load();
+
+            // Create a new scene with the loaded FXML file
+            Scene secondScene = new Scene(secondSceneRoot, 600, 400);
+
+            // Get the stage from the button and set the new scene
+            Stage stage = (Stage) openAlbumButton.getScene().getWindow();
+            stage.setScene(secondScene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
