@@ -40,7 +40,6 @@ public class AlbumsController implements Initializable {
     private Button deleteAlbumButton;
     @FXML
     private Button renameAlbumButton;
-
     @FXML
     private TableView<Album> tableView;
 
@@ -87,10 +86,6 @@ public class AlbumsController implements Initializable {
 
         // Add data to the TableView
         tableView.getItems().addAll(albums);
-
-        //
-        // THIS DOESNT WIPE AWAY OLD ENTRIES WHEN NEW ENTRIES ARE ADDED.
-        //
     }
 
     public boolean userExists(String name) {
@@ -125,12 +120,18 @@ public class AlbumsController implements Initializable {
                 // Handle the entered album name here
                 String enteredText = result.get().toUpperCase().strip();
 
-
-                if (content.getAlbumNames().contains(enteredText) || enteredText.equals("")) {
+                if (enteredText.equals("")) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Error");
                     alert.setHeaderText(null);
                     alert.setContentText("Empty album name not allowed!");
+                    alert.showAndWait();
+                    return;
+                } else if (content.getAlbumNames().contains(enteredText)) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Album already exists!");
                     alert.showAndWait();
                     return;
                 }
@@ -167,15 +168,21 @@ public class AlbumsController implements Initializable {
             // Handle the entered album name here
             String enteredText = result.get().toUpperCase().strip();
 
-            if (content.getAlbumNames().contains(enteredText) || enteredText.equals("")) {
+            if (enteredText.equals("")) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setHeaderText(null);
                 alert.setContentText("Empty album name not allowed!");
                 alert.showAndWait();
                 return;
+            } else if (content.getAlbumNames().contains(enteredText)) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText(null);
+                alert.setContentText("Album already exits!");
+                alert.showAndWait();
+                return;
             }
-
             content.albums.add(new Album(enteredText.toUpperCase()));
             displayData(content.albums);
             try {
