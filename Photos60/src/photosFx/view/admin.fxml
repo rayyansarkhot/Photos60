@@ -32,7 +32,7 @@
       </rowConstraints>
       <children>
         <Button mnemonicParsing="false" text="Create user" GridPane.halignment="CENTER"
-          GridPane.valignment="CENTER" />
+          GridPane.valignment="CENTER" onAction="#handleCreateUserButtonClicked" fx:id="createUserButton"/>
         <Button mnemonicParsing="false" text="Delete user" GridPane.columnIndex="1"
           GridPane.halignment="CENTER" onAction="#handleDeleteUserButtonClicked" fx:id="deleteUserButton"/>
       </children>
