@@ -33,7 +33,7 @@ public class MainController {
     private void handleLoginButtonClicked() {
         try {
 
-            String username = usernameField.getText(); // Retrieve text from TextField
+            String username = usernameField.getText().strip().toUpperCase(); // Retrieve text from TextField
 
             if (username.strip().equalsIgnoreCase("ADMIN")) {
                 // Load the FXML file for the new scene
