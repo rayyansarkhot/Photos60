@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1336.0" prefWidth="1122.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="photosFx.controller.EditPhotoController">
+   <columnConstraints>
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="1122.0" minWidth="10.0" prefWidth="1122.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="550.0" minWidth="0.0" prefWidth="0.0" />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints maxHeight="75.0" minHeight="0.0" prefHeight="20.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="724.0" minHeight="10.0" prefHeight="200.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="75.0" prefHeight="30.0" vgrow="SOMETIMES" />
+   </rowConstraints>
+   <children>
+      <GridPane gridLinesVisible="true" GridPane.rowIndex="1">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <VBox alignment="CENTER" prefHeight="509.0" prefWidth="563.0" spacing="5.0">
+                     <children>
+                        <Text fx:id="imagePath" strokeType="OUTSIDE" strokeWidth="0.0" text="Image Path" />
+                        <ImageView fx:id="imageView" fitHeight="283.0" fitWidth="324.0" pickOnBounds="true" preserveRatio="true" />
+                        <Text fx:id="imageDate" strokeType="OUTSIDE" strokeWidth="0.0" text="Date taken" />
+                     </children>
+                  </VBox>
+                  <VBox alignment="CENTER" prefHeight="472.0" prefWidth="342.0" spacing="5.0">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Photo Name" textAlignment="CENTER" wrappingWidth="341.13671875" />
+                        <Text fx:id="textField" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Photo Caption" wrappingWidth="341.13671875" />
+                        <TextArea fx:id="photoCaption" prefHeight="142.0" prefWidth="311.0" promptText="Enter caption here" wrapText="true" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tags" wrappingWidth="341.13671875" />
+                        <TableView fx:id="tagView" prefHeight="168.0" prefWidth="342.0">
+                           <columns>
+                              <TableColumn prefWidth="200.0" text="Tag Name" />
+                              <TableColumn prefWidth="200.0" text="Tag Value" />
+                           </columns>
+                        </TableView>
+                        <HBox alignment="TOP_CENTER" prefHeight="35.0" prefWidth="342.0" spacing="5.0">
+                           <children>
+                              <Button fx:id="createTagButton" mnemonicParsing="false" onAction="#createTag" text="Create New Tag" textAlignment="CENTER" />
+                              <Button fx:id="deleteTagButton" mnemonicParsing="false" onAction="#deleteTag" text="Delete Selected Tag" textAlignment="CENTER" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+         </children>
+      </GridPane>
+      <GridPane gridLinesVisible="true" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+               <children>
+                  <Button fx:id="debug" mnemonicParsing="false" onAction="#debug" text="Debug" />
+                  <Button fx:id="saveChangeButton" mnemonicParsing="false" onAction="#saveChanges" text="Save" />
+<!--                  <Button fx:id="debug2" mnemonicParsing="false" onAction="#debug" text="Debug" />-->
+               </children>
+            </HBox>
+         </children>
+      </GridPane>
+      <GridPane prefHeight="100.0">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <Label alignment="CENTER" prefHeight="179.0" prefWidth="571.0" text="Open/Edit Photo">
+               <font>
+                  <Font size="40.0" />
+               </font>
+            </Label>
+            <HBox alignment="CENTER" prefHeight="355.0" prefWidth="245.0" spacing="5.0" GridPane.columnIndex="1">
+               <children>
+                  <Button fx:id="exitButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#exitButtonClicked" text="Exit">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Button>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </HBox>
+         </children>
+      </GridPane>
+   </children>
+</GridPane>
