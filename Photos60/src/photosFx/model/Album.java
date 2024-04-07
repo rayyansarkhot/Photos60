@@ -1,19 +1,21 @@
 package photosFx.model;
 
-import java.io.Serializable;
+import java.io.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Album implements Serializable {
     public String name;
     public int numPhotos;
     // public List<Photo> photos;
+    public List<Photo> photos;
+    static final long serialVersionUID = 1L;
 
     public Album(String name) {
         this.name = name;
         this.numPhotos = 0;
-
-        // this.photos = new ArrayList<>();
+        this.photos = new ArrayList<>();
     }
 
     public String getName() {
@@ -27,13 +29,22 @@ public class Album implements Serializable {
     public int getNumPhotos() {
         return numPhotos;
     }
-    // Add methods to manipulate photos within the album
-    // public void addPhoto(Photo photo) {
-    // photos.add(photo);
-    // }
 
-    // public List<Photo> getPhotos() {
-    // return photos;
-    // }
+    public void addPhoto(Photo photo) {
+        photos.add(photo);
+        numPhotos = photos.size();
+        updateDateRange();
+    }
+
+    public void removePhoto(Photo photo) {
+        photos.remove(photo);
+        numPhotos = photos.size();
+        updateDateRange();
+    }
+
+    public List<Photo> getPhotos() {
+        return photos;
+    }
+
 
 }

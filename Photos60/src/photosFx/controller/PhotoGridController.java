@@ -1,19 +1,34 @@
 package photosFx.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
+import java.text.SimpleDateFormat;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import photosFx.model.Album;
+import photosFx.model.ContentSerializer;
+import photosFx.model.Photo;
+import static photosFx.controller.AlbumsController.username;
 
 public class PhotoGridController implements Initializable {
 
@@ -22,10 +37,61 @@ public class PhotoGridController implements Initializable {
 
     @FXML
     public Button backButton;
+    @FXML
+    public Button addPhotoButton;
+    @FXML
+    public Button refreshButton;
 
+
+
+
+    @FXML
+    ImageView photoCover;
+
+    @FXML
+    Text photoCaption;
+    @FXML
+    Text photoDate;
+    @FXML
+    Text photoName;
+
+    @FXML
+    Button openSlideshowButton;
+    @FXML
+    Button editPhotoButton;
+    @FXML
+    Button deletePhotoButton;
+    @FXML
+    Button copyPhotoButton;
+    @FXML
+    Button movePhotoButton;
+
+    Photo populatePhoto;
+    private static Photo currentImage;
+    public static Album currentAlbum; // Add this line
+
+
+    FileChooser fileChooser = new FileChooser();
+
+    // method for individual photo hover effect
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        // This method will be called when the FXML file is loaded
-
+        if (photoCover != null) {
+            photoCover.hoverProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue) {
+                    if (photoCover.getEffect() != null) {
+                        return;
+                    };
+                    DropShadow glow = new DropShadow();
+                    glow.setColor(Color.web("#039ED3"));
+                    glow.setRadius(7);
+                    glow.setSpread(.8);
+                    photoCover.setEffect(glow);
+                } else {
+                    photoCover.setEffect(null);
+                    photoCover.setOpacity(1);
+                }
+            });
+        }
     }
 
     private void displayData(List<Album> albums) {
@@ -33,6 +99,35 @@ public class PhotoGridController implements Initializable {
     }
 
 
+    @FXML
+    FlowPane photoScroll;
+    @FXML
+    AnchorPane anchorPane;
+    public void refresh() {
+        Album album = currentAlbum;
+        List<Photo> photos = album.getPhotos();
+        photoScroll.getChildren().clear();
+        List<Photo> sortedPhotos = photos.stream().sorted(Comparator.comparing(Photo::getName))
+                .toList();
+
+        for (Photo photo : sortedPhotos) {
+            try {
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(getClass().getResource("../view/singlephoto.fxml"));
+                AnchorPane photoCover = loader.load();
+                PhotoGridController controller = loader.getController();
+                controller.setPhoto(photo);
+                photoScroll.getChildren().add(photoCover);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        try {
+            ContentSerializer.saveContent(AlbumsController.content, username);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     @FXML
     private void handleLogoutButtonClicked() {
         try {
@@ -67,5 +162,123 @@ public class PhotoGridController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void setCurrentAlbum(Album album) {
+        this.currentAlbum = album;
+    }
+
+    @FXML
+    public void addPhoto(ActionEvent actionEvent) throws IOException {
+        fileChooser.setTitle("Select Picture");
+        fileChooser.setInitialDirectory(
+                new File(System.getProperty("user.home")));
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("All images", "*.png", "*.jpg", "*.jpeg", "*.gif"));
+        Stage primaryStage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        File file = fileChooser.showOpenDialog(primaryStage);
+        if (file == null) {
+            return;
+        }
+        Photo newPhoto = new Photo(file);
+        if (currentAlbum != null) {
+            currentAlbum.addPhoto(newPhoto);
+        }
+        refresh();
+    }
+
+    SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+
+    private Map<ImageView, Photo> photoMap = new HashMap<>();
+    public void setPhoto(Photo photo) {
+        photoName.setText(photo.getName().substring(0, Math.min(photo.getName().length(), 17))
+                + (photo.getName().length() > 17 ? "..." : ""));
+        String caption = photo.getCaption();
+        if (caption == null || caption.isEmpty()) {
+            photoCaption.setText("No caption");
+            photoCaption.setFill(Color.GRAY);
+        } else {
+            photoCaption.setText(caption);
+        }
+        photoDate.setText(formatter.format(photo.getDate()));
+        photoCover.setImage(new Image(photo.getFile().toURI().toString()));
+        photoMap.put(photoCover, photo);
+        populatePhoto = photo;
+        return;
+    }
+
+    /* ------ methods for photo options ------ */
+
+    public void editPhoto() throws IOException {
+        System.out.println("edit photo clicked");
+        if (currentImage != null) {
+            try {
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(getClass().getResource("../view/editphoto.fxml"));
+                Parent secondSceneRoot = loader.load();
+
+                EditPhotoController editPhotoController = loader.getController();
+                editPhotoController.setCurrentPhoto(currentImage);
+
+                // controller.setCurrentPhoto(currentImage);
+                Scene secondScene = new Scene(secondSceneRoot, 800, 600);
+                Stage stage = new Stage();
+                editPhotoController.refresh();
+                stage.setScene(secondScene);
+                stage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    public void openSlideshow() throws IOException {
+//        if (currentImage != null) {
+//            FXMLLoader loader = new FXMLLoader();
+//            loader.setLocation(getClass().getResource("../view/slideshow.fxml"));
+//            Parent secondSceneRoot = loader.load();
+//            SlideshowController controller = loader.getController();
+//            controller.setCurrentPhoto(currentImage);
+//            Scene secondScene = new Scene(secondSceneRoot, 800, 600);
+//            Stage stage = (Stage) openSlideshowButton.getScene().getWindow();
+//            stage.setScene(secondScene);
+//        }
+        System.out.println("open slideshow clicked");
+
+    }
+
+    public void deletePhoto() throws IOException {
+        System.out.println("delete photo clicked");
+        if (currentImage != null) {
+            currentAlbum.removePhoto(currentImage);
+            refresh();
+        }
+    }
+
+    public void copyPhoto() throws IOException {
+        System.out.println("copy photo clicked");
+    }
+
+    public void movePhoto() throws IOException {
+        System.out.println("move photo clicked");
+    }
+
+
+    public void selectedPhoto(MouseEvent mouseEvent) {
+        ImageView imageView = (ImageView) mouseEvent.getSource();
+        Image image = imageView.getImage();
+        choose(imageView);
+    }
+
+    public void choose (ImageView selectedImage) {
+        // currentPhoto = AlbumsController.content.get(username).get(currentAlbum.getName()).get(selectedImage.getImage().getUrl());
+        this.currentImage = photoMap.get(selectedImage);
+        DropShadow selectedGlow = new DropShadow();
+        selectedGlow.setColor(Color.RED);
+        selectedGlow.setRadius(7);
+        selectedGlow.setSpread(.8);
+        selectedImage.setEffect(selectedGlow);
+        System.out.println("selected " + selectedImage.getImage().getUrl());
     }
 }

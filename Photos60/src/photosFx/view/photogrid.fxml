@@ -20,14 +20,14 @@
    <rowConstraints>
       <RowConstraints maxHeight="355.0" minHeight="0.0" prefHeight="0.0" vgrow="SOMETIMES" />
       <RowConstraints maxHeight="724.0" minHeight="10.0" prefHeight="200.0" vgrow="SOMETIMES" />
-      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="75.0" prefHeight="30.0" vgrow="SOMETIMES" />
    </rowConstraints>
    <children>
       <AnchorPane fx:id="anchorPane" minHeight="0.0" minWidth="0.0" prefHeight="648.0" prefWidth="441.0" GridPane.rowIndex="1">
          <children>
             <ScrollPane fitToHeight="true" fitToWidth="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <content>
-                  <FlowPane fx:id="photosPane" hgap="10.0" prefWrapLength="1000.0" vgap="10.0" />
+                  <FlowPane fx:id="photoScroll" hgap="10.0" prefWrapLength="1000.0" vgap="10.0" />
                </content>
             </ScrollPane>
          </children>
@@ -35,11 +35,21 @@
       <GridPane gridLinesVisible="true" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
          </columnConstraints>
          <rowConstraints>
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
          </rowConstraints>
+         <children>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+               <children>
+                  <Button fx:id="openSlideshowButton" mnemonicParsing="false" text="Open slideshow" onAction="#openSlideshow"/>
+                  <Button fx:id="editPhotoButton" mnemonicParsing="false" text="Edit photo" onAction="#editPhoto"/>
+                  <Button fx:id="copyPhotoButton" mnemonicParsing="false" text="Copy photo" onAction="#copyPhoto"/>
+                  <Button fx:id="movePhotoButton" mnemonicParsing="false" text="Move photo" onAction="#movePhoto"/>
+                  <Button fx:id="deletePhotoButton" mnemonicParsing="false" text="Delete photo" onAction="#deletePhoto"/>
+               </children>
+            </HBox>
+         </children>
       </GridPane>
       <GridPane>
          <columnConstraints>
@@ -57,6 +67,16 @@
             </Label>
             <HBox alignment="CENTER_RIGHT" prefHeight="355.0" prefWidth="245.0" spacing="5.0" GridPane.columnIndex="1">
                <children>
+                  <Button fx:id="refreshButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#refresh" text="↻">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="addPhotoButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#addPhoto" text="Add photo">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Button>
                   <Button fx:id="backButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#backButtonClicked" text="Go Back">
                      <font>
                         <Font size="20.0" />

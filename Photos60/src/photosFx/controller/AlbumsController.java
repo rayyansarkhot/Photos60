@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.TextInputDialog;
 import java.util.Optional;
@@ -30,7 +31,11 @@ import photosFx.model.Content;
 public class AlbumsController implements Initializable {
 
     public static String username = "";
-    public Content content;
+    public static Content content;
+    @FXML
+    public Label status;
+    @FXML
+    private Label windowLabel;
 
     @FXML
     private Button logoutButton;
@@ -156,6 +161,13 @@ public class AlbumsController implements Initializable {
         }
     }
 
+    public static void updateContent() {
+        try {
+            ContentSerializer.saveContent(content, username);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     @FXML
     private void handleCreateAlbumButtonClicked() {
 
@@ -219,6 +231,7 @@ public class AlbumsController implements Initializable {
         }
     }
 
+    @FXML
     private String deleteAlbum(Album selectedAlbum) {
 
         String name = selectedAlbum.getName();
@@ -237,18 +250,37 @@ public class AlbumsController implements Initializable {
 
     @FXML
     private void openAlbum() {
+        Album selectedAlbum = tableView.getSelectionModel().getSelectedItem();
+        if (selectedAlbum == null) {
+            System.out.println("no album selected");
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("No album selected. Please select an album to open.");
+            alert.showAndWait();
+            return;
+        }
         try {
             // Load the FXML file for the new scene
             FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/photogrid.fxml"));
             Parent secondSceneRoot = loader.load();
 
             // Create a new scene with the loaded FXML file
-            Scene secondScene = new Scene(secondSceneRoot, 600, 400);
+            Scene secondScene = new Scene(secondSceneRoot, 800, 600);
+
+            System.out.println("Current album: " + selectedAlbum);
+            PhotoGridController photoGridController = loader.getController();
+            photoGridController.setCurrentAlbum(selectedAlbum);
 
             // Get the stage from the button and set the new scene
             Stage stage = (Stage) openAlbumButton.getScene().getWindow();
+
+            stage.setTitle("Opening " + selectedAlbum.getName() + " Album ...");
+            photoGridController.refresh();
+
             stage.setScene(secondScene);
             stage.show();
+            stage.setTitle(selectedAlbum.getName() + " Album");
         } catch (IOException e) {
             e.printStackTrace();
         }
