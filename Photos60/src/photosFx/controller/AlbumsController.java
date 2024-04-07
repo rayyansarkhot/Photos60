@@ -86,10 +86,10 @@ public class AlbumsController implements Initializable {
         // Set up cell value factory to extract the name from the Album object
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         numPhotosColumn.setCellValueFactory(new PropertyValueFactory<>("numPhotos"));
-        // earliestPhotoColumn.setCellValueFactory(new
-        // PropertyValueFactory<>("earliestPhoto"));
-        // latestPhotoColumn.setCellValueFactory(new
-        // PropertyValueFactory<>("latestPhoto"));
+         earliestPhotoColumn.setCellValueFactory(new
+         PropertyValueFactory<>("earliestPhoto"));
+         latestPhotoColumn.setCellValueFactory(new
+         PropertyValueFactory<>("latestPhoto"));
 
         // Add data to the TableView
         tableView.getItems().addAll(albums);

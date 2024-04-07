@@ -66,6 +66,7 @@ public class MainController {
                 // Get the stage from the button and set the new scene
                 Stage stage = (Stage) loginButton.getScene().getWindow();
                 stage.setScene(secondScene);
+                stage.setTitle(username + "'s Albums");
 
             }
 

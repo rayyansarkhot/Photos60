@@ -15,6 +15,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -22,6 +24,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.FontPosture;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -109,6 +112,14 @@ public class PhotoGridController implements Initializable {
         photoScroll.getChildren().clear();
         List<Photo> sortedPhotos = photos.stream().sorted(Comparator.comparing(Photo::getName))
                 .toList();
+        // might not be the best way, check Album model updateDateRange() instead
+        if (sortedPhotos.isEmpty()) {
+            currentAlbum.setEarliestPhoto(null);
+            currentAlbum.setLatestPhoto(null);
+            return;
+        }
+        currentAlbum.setEarliestPhoto(sortedPhotos.get(0).getDate());
+        currentAlbum.setLatestPhoto(sortedPhotos.get(sortedPhotos.size() - 1).getDate());
 
         for (Photo photo : sortedPhotos) {
             try {
