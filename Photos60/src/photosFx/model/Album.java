@@ -1,5 +1,6 @@
 package photosFx.model;
 
+import javafx.scene.control.Alert;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Date;
@@ -19,6 +20,27 @@ public class Album implements Serializable {
         this.photos = new ArrayList<>();
     }
 
+    public Album(String newAlbumName, ArrayList<Photo> photoSearchResultsArray) {
+        this.name = newAlbumName;
+        this.numPhotos = photoSearchResultsArray.size();
+        this.photos = photoSearchResultsArray;
+        updateDateRange();
+    }
+
+    public boolean doesPhotoExist(Photo newPhoto) {
+        for (Photo photo : this.photos) {
+            if (photo.getFilePath().equals(newPhoto.getFilePath())) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText(null);
+                alert.setContentText("The photo already exists in the album.");
+                alert.showAndWait();
+                return true;
+            }
+        }
+        return false;
+    }
+
     public String getName() {
         return name;
     }
@@ -32,9 +54,11 @@ public class Album implements Serializable {
     }
 
     public void addPhoto(Photo photo) {
-        photos.add(photo);
-        numPhotos = photos.size();
-        updateDateRange();
+        if (!doesPhotoExist(photo)) {
+            photos.add(photo);
+            numPhotos = photos.size();
+            updateDateRange();
+        }
     }
 
     public void removePhoto(Photo photo) {
