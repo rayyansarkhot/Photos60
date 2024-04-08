@@ -300,14 +300,69 @@ public class PhotoGridController implements Initializable {
         alert.setContentText("No photo selected.");
         alert.showAndWait();
     }
+
+    private void transferPhoto(boolean isMoveOperation) throws IOException {
+        System.out.println((isMoveOperation ? "move" : "copy") + " photo clicked");
+        if (currentImage != null) {
+            // Get the names of all albums
+            List<String> choices = new ArrayList<>();
+            for (Album album : content.albums) {
+                choices.add(album.getName());
+            }
+
+            // Create a dialog to ask for the album name
+            ChoiceDialog<String> dialog = new ChoiceDialog<>(null, choices);
+            dialog.setTitle((isMoveOperation ? "Move" : "Copy") + " Photo");
+            dialog.setHeaderText("Choose the album you want to " + (isMoveOperation ? "move" : "copy") + " the photo to:");
+            Optional<String> result = dialog.showAndWait();
+
+            // If the user made a selection, try to find the album
+            if (result.isPresent()) {
+                String albumName = result.get();
+                Album targetAlbum = null;
+                for (Album album : content.albums) {
+                    if (album.getName().equals(albumName)) {
+                        targetAlbum = album;
+                        break;
+                    }
+                }
+
+                // If the album was found, copy or move the photo
+                if (targetAlbum != null) {
+                    // note: consider removing isMoveOperatioon here
+                    if (isMoveOperation && targetAlbum.doesPhotoExist(currentImage)) {
+                        return;
+                    }
+                    targetAlbum.addPhoto(currentImage);
+                    if (isMoveOperation) {
+                        currentAlbum.removePhoto(currentImage);
+                    }
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Success");
+                    alert.setHeaderText(null);
+                    alert.setContentText("The photo was successfully " + (isMoveOperation ? "moved" : "copied") + " to the album " + albumName + ".");
+                    alert.showAndWait();
+                    refresh();
+                } else {
+                    // If the album was not found, show an error message
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText(null);
+                    alert.setContentText("The album " + albumName + " does not exist.");
+                    alert.showAndWait();
+                }
+            }
+        } else {noPhotoAlert();}
     }
 
+    @FXML
     public void copyPhoto() throws IOException {
-        System.out.println("copy photo clicked");
+        transferPhoto(false);
     }
 
+    @FXML
     public void movePhoto() throws IOException {
-        System.out.println("move photo clicked");
+        transferPhoto(true);
     }
 
 
