@@ -43,7 +43,7 @@
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                <children>
                   <Button fx:id="openSlideshowButton" mnemonicParsing="false" text="Open slideshow" onAction="#openSlideshow"/>
-                  <Button fx:id="editPhotoButton" mnemonicParsing="false" text="Edit photo" onAction="#editPhoto"/>
+                  <Button fx:id="editPhotoButton" mnemonicParsing="false" text="Open/Edit photo" onAction="#editPhoto"/>
                   <Button fx:id="copyPhotoButton" mnemonicParsing="false" text="Copy photo" onAction="#copyPhoto"/>
                   <Button fx:id="movePhotoButton" mnemonicParsing="false" text="Move photo" onAction="#movePhoto"/>
                   <Button fx:id="deletePhotoButton" mnemonicParsing="false" text="Delete photo" onAction="#deletePhoto"/>
