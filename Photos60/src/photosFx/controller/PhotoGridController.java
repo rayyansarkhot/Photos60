@@ -31,7 +31,9 @@ import javafx.stage.Stage;
 import photosFx.model.Album;
 import photosFx.model.ContentSerializer;
 import photosFx.model.Photo;
+import static photosFx.controller.AlbumsController.content;
 import static photosFx.controller.AlbumsController.username;
+import photosFx.controller.BaseController.EditPhotoController;
 
 public class PhotoGridController implements Initializable {
 
@@ -73,6 +75,7 @@ public class PhotoGridController implements Initializable {
     private static Photo currentImage;
     public static Album currentAlbum; // Add this line
 
+    public static List<Photo> sortedPhotos;
 
     FileChooser fileChooser = new FileChooser();
 
@@ -90,8 +93,11 @@ public class PhotoGridController implements Initializable {
                     glow.setSpread(.8);
                     photoCover.setEffect(glow);
                 } else {
-                    photoCover.setEffect(null);
-                    photoCover.setOpacity(1);
+                    // ensures photo stays red
+                    if (photoMap.get(photoCover) != currentImage) {
+                        photoCover.setEffect(null);
+                        photoCover.setOpacity(1);
+                    }
                 }
             });
         }
@@ -110,7 +116,7 @@ public class PhotoGridController implements Initializable {
         Album album = currentAlbum;
         List<Photo> photos = album.getPhotos();
         photoScroll.getChildren().clear();
-        List<Photo> sortedPhotos = photos.stream().sorted(Comparator.comparing(Photo::getName))
+        sortedPhotos = photos.stream().sorted(Comparator.comparing(Photo::getName))
                 .toList();
         // might not be the best way, check Album model updateDateRange() instead
         if (sortedPhotos.isEmpty()) {
@@ -194,6 +200,12 @@ public class PhotoGridController implements Initializable {
         Photo newPhoto = new Photo(file);
         if (currentAlbum != null) {
             currentAlbum.addPhoto(newPhoto);
+            if (!currentAlbum.doesPhotoExist(newPhoto)) {
+                currentAlbum.addPhoto(newPhoto);
+                refresh();
+            } else {
+                return;
+            }
         }
         refresh();
     }
@@ -245,18 +257,31 @@ public class PhotoGridController implements Initializable {
 
 
     public void openSlideshow() throws IOException {
-//        if (currentImage != null) {
-//            FXMLLoader loader = new FXMLLoader();
-//            loader.setLocation(getClass().getResource("../view/slideshow.fxml"));
-//            Parent secondSceneRoot = loader.load();
-//            SlideshowController controller = loader.getController();
-//            controller.setCurrentPhoto(currentImage);
-//            Scene secondScene = new Scene(secondSceneRoot, 800, 600);
-//            Stage stage = (Stage) openSlideshowButton.getScene().getWindow();
-//            stage.setScene(secondScene);
-//        }
         System.out.println("open slideshow clicked");
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("../view/slideshow.fxml"));
+            Parent secondSceneRoot = loader.load();
 
+            BaseController.SlideshowController slideshowController = loader.getController();
+            if (currentImage != null) {
+                slideshowController.setCurrentPhoto(currentImage);
+            } else {
+                slideshowController.setCurrentPhoto(sortedPhotos.get(0));
+            }
+            slideshowController.setCurrentAlbum(sortedPhotos);
+
+            Scene secondScene = new Scene(secondSceneRoot, 800, 600);
+            Stage stage = (Stage) openSlideshowButton.getScene().getWindow();
+            stage.setTitle("Opening slideshow ...");
+            slideshowController.refresh();
+            stage.setScene(secondScene);
+            stage.show();
+            stage.setTitle("Slideshow");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void deletePhoto() throws IOException {
