@@ -14,9 +14,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextField;
+import javafx.scene.control.ChoiceDialog;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -76,6 +76,7 @@ public class PhotoGridController implements Initializable {
     public static Album currentAlbum; // Add this line
 
     public static List<Photo> sortedPhotos;
+    private static ImageView lastSelectedImage = null;
 
     FileChooser fileChooser = new FileChooser();
 
@@ -252,7 +253,7 @@ public class PhotoGridController implements Initializable {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
+        } else {noPhotoAlert();}
     }
 
 
@@ -290,6 +291,15 @@ public class PhotoGridController implements Initializable {
             currentAlbum.removePhoto(currentImage);
             refresh();
         }
+        } else {noPhotoAlert();}
+    }
+    public void noPhotoAlert() {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText(null);
+        alert.setContentText("No photo selected.");
+        alert.showAndWait();
+    }
     }
 
     public void copyPhoto() throws IOException {
@@ -303,18 +313,26 @@ public class PhotoGridController implements Initializable {
 
     public void selectedPhoto(MouseEvent mouseEvent) {
         ImageView imageView = (ImageView) mouseEvent.getSource();
-        Image image = imageView.getImage();
-        choose(imageView);
+        if (lastSelectedImage == imageView) {
+            return;
+        }
+        // ensure valid image
+        if (photoMap.containsKey(imageView)) {
+            choose(imageView);
+        }
     }
 
-    public void choose (ImageView selectedImage) {
-        // currentPhoto = AlbumsController.content.get(username).get(currentAlbum.getName()).get(selectedImage.getImage().getUrl());
-        this.currentImage = photoMap.get(selectedImage);
-        DropShadow selectedGlow = new DropShadow();
-        selectedGlow.setColor(Color.RED);
-        selectedGlow.setRadius(7);
-        selectedGlow.setSpread(.8);
-        selectedImage.setEffect(selectedGlow);
-        System.out.println("selected " + selectedImage.getImage().getUrl());
+    public void choose(ImageView selectedImage) {
+        // Remove effect and reset opacity for previously selected image
+        if (lastSelectedImage != null) {
+            lastSelectedImage.setEffect(null);
+            lastSelectedImage.setOpacity(1);
+        }
+        // Highlight the selected image or apply some effect to indicate selection
+        selectedImage.setOpacity(0.5);
+        // Update the reference to the last selected image
+        lastSelectedImage = selectedImage;
+        currentImage = photoMap.get(selectedImage);
+        System.out.println("Selected " + selectedImage.getImage().getUrl());
     }
 }
