@@ -12,12 +12,10 @@ public class Content implements Serializable {
 
     /**
      * Sample test constructor for Content.
+     * @author Rayyan Sarkhot
      */
     public Content() {
         albums = new ArrayList<Album>(); // Initialize the list
-        albums.add(new Album("RAYYAN"));
-        albums.add(new Album("SHAYAN"));
-
     }
 
     /**

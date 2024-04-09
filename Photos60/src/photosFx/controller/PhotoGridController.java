@@ -228,6 +228,7 @@ public class PhotoGridController implements Initializable {
 
     /**
      * This method is called when the Edit Photo button is clicked. Opens the edit photo window
+     * @author Shayan Rahmatullah
      */
     public void setPhoto(Photo photo) {
         photoName.setText(photo.getName().substring(0, Math.min(photo.getName().length(), 17))

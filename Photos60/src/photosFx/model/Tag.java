@@ -15,6 +15,7 @@ public class Tag implements Serializable {
      * Constructor for Tag.
      * @param tagName the name of the tag
      * @param tagValue the value of the tag
+     * @author Shayan Rahmatullah
      */
     public Tag(String tagName, String tagValue) {
         this.tagName = tagName;

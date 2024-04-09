@@ -30,6 +30,7 @@ import photosFx.model.ContentSerializer;
 
 /**
  * Admin view, which allows creation and deletion of users.
+ * @author Rayyan Sarkhot
  */
 public class AdminController implements Initializable {
     @FXML

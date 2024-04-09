@@ -25,6 +25,7 @@ public class Album implements Serializable {
      * Constructor for Album.
      * @param newAlbumName the name of the album
      * @param photoSearchResultsArray the photos to add to the album
+     * @author Shayan Rahmatullah
      */
     public Album(String newAlbumName, ArrayList<Photo> photoSearchResultsArray) {
         this.name = newAlbumName;

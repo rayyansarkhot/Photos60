@@ -26,6 +26,7 @@ import javafx.fxml.FXMLLoader;
 import static photosFx.controller.AlbumsController.content;
 /**
  * Controller for the search view.
+ * @author Shayan Rahmatullah
  */
 public class SearchController implements Initializable {
     @FXML

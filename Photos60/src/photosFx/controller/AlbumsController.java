@@ -22,7 +22,9 @@ import photosFx.model.Album;
 import photosFx.model.ContentSerializer;
 import photosFx.model.Content;
 
-/** Albums view, which allows creation, deletion, and renaming of albums. */
+/** Albums view, which allows creation, deletion, and renaming of albums.
+ * @author Rayyan Sarkhot
+*/
 public class AlbumsController implements Initializable {
 
     public static String username = "";

@@ -46,6 +46,7 @@ public class Photo implements Serializable {
      * @param pic the photo file
      * @param caption the caption of the photo
      * @param tags the tags of the photo
+     * @author Shayan Rahmatullah
      */
     public Photo(Photo photo) {
         this.date = photo.getDate();

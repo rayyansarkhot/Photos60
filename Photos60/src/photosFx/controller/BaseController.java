@@ -27,6 +27,7 @@ import javafx.scene.image.ImageView;
 
 /**
  * Base controller for the application, common method for slideshow, opening the photo, and editing captions and tags
+ * @author Shayan Rahmatullah
  */
 public class BaseController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {

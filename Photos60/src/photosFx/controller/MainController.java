@@ -24,6 +24,7 @@ import java.util.Optional;
 
 /**
  * Admin view, which allows creation and deletion of users.
+ * @author Rayyan Sarkhot
  */
 public class MainController {
 

@@ -2,6 +2,11 @@ package photosFx.model;
 
 import java.io.*;
 
+/**
+ * Serializes object for use after application closes.
+ * @author Rayyan Sarkhot
+ */
+
 public class ContentSerializer {
     static final long serialVersionUID = 1L;
 
