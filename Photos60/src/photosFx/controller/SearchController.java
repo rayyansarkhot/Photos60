@@ -1,7 +1,3 @@
-/**
- *
- * @author Harshith Samayamantula
- */
 package photosFx.controller;
 
 import javafx.event.ActionEvent;
@@ -29,37 +25,25 @@ import javafx.fxml.FXMLLoader;
 
 import static photosFx.controller.AlbumsController.content;
 
-/**
- * Class allows user to search for photos in multiple ways
- */
 public class SearchController implements Initializable {
     @FXML
     public ChoiceBox andOrSelect;
 
     @FXML
-    TextField firstKey, firstValue, secondKey, secondValue;
+    TextField firstKey, firstValue;
+    @FXML
+    TextField secondKey, secondValue;
     @FXML
     Button makeAlbum, logoutButton, searchByTagButton, searchByDateButton, backButton;
     @FXML
     ListView<String> searchResults;
     @FXML
     DatePicker pickStartDate, pickToDate;
-    /**
-     * observable list of all search results in String type
-     */
+
     ObservableList<String> observablePhotoSearchResultsArray = FXCollections
             .observableArrayList(new ArrayList<String>());
-    /**
-     * Arraylist of photos used to save search results
-     */
-    ArrayList<Photo> photoSearchResultsArray = new ArrayList<Photo>();
 
-    /**
-     * refreshes list of photos after scene loads
-     */
-//    public void start() {
-//        refresh();
-//    }
+    ArrayList<Photo> photoSearchResultsArray = new ArrayList<Photo>();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -84,12 +68,8 @@ public class SearchController implements Initializable {
         });
 
         refresh();
-
     }
 
-    /**
-     * Updates list of photos and ObservableList to match what it actually is
-     */
     public void refresh() {
         observablePhotoSearchResultsArray.clear();
         ArrayList<String> photoDetails = new ArrayList<String>();
@@ -101,35 +81,11 @@ public class SearchController implements Initializable {
         searchResults.refresh();
     }
 
-    /**
-     * logs current user out
-     *
-     * @param e action event provided by fxml
-     * @throws IOException
-     */
-//    public void logOut(ActionEvent e) throws IOException {
-//        logMeOut(e);
-//    }
-
-    /**
-     * User can search for photos by a tag value and name and save it to
-     * photoSearchResultsArray
-     *
-     * @param e action event provided by fxml
-     * @throws IOException
-     */
     public void searchByTag(ActionEvent e) {
         String man1name = firstKey.getText().trim();
         String man1value = firstValue.getText().trim();
         String man2name = secondKey.getText().trim();
         String man2value = secondValue.getText().trim();
-
-//        mandatoryTag1Name.clear();
-//        mandatoryTag1Value.clear();
-//        mandatoryTag2Name.clear();
-//        mandatoryTag2Value.clear();
-//        optionalTag1Name.clear();
-//        optionalTag1Value.clear();
 
         if (man1name.isEmpty() || man1value.isEmpty()) {
             Alert alert = new Alert(AlertType.ERROR);
@@ -207,13 +163,7 @@ public class SearchController implements Initializable {
         return results;
     }
 
-    /**
-     * allows user to search for photo by date and save it to
-     * photoSearchResultsArray
-     *
-     * @param e action event provided by fxml
-     * @throws ParseException
-     */
+
     public void searchByDate(ActionEvent e) throws ParseException {
         String dateBeginning = pickStartDate.getValue().toString();
         String dateEnd = pickToDate.getValue().toString();
@@ -221,7 +171,7 @@ public class SearchController implements Initializable {
         if (dateBeginning.isEmpty() || dateBeginning == null || dateEnd.isEmpty() || dateEnd == null) {
             Alert alert = new Alert(AlertType.ERROR);
             alert.setTitle("Empty Input");
-            alert.setHeaderText("Please enter valid dates in mm/dd/yyyy format!");
+            alert.setHeaderText("Please enter dates using the date picker and try again.");
             alert.showAndWait();
             return;
         }
@@ -253,7 +203,6 @@ public class SearchController implements Initializable {
         refresh();
 
     }
-
 
     public ArrayList<Photo> getPhotosInRange(Date date1, Date date2) {
         ArrayList<Photo> results = new ArrayList<Photo>();
