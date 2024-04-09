@@ -2,6 +2,7 @@ package photosFx.model;
 
 import java.io.*;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import java.nio.file.attribute.FileTime;
@@ -23,7 +24,7 @@ public class Photo implements Serializable {
 
     public Photo(File pic) throws IOException {
         if (pic != null) {
-            this.filePath = pic.getAbsolutePath();
+            this.filePath = setRelativePath(pic);
             this.name = pic.getName();
             this.picture = pic;
             this.caption = "";
@@ -31,12 +32,29 @@ public class Photo implements Serializable {
 
             FileTime fileTime = Files.getLastModifiedTime(Paths.get(filePath));
             this.date = new Date(fileTime.toMillis());
-
         }
     }
 
+    public Photo(Photo photo) {
+        this.date = photo.getDate();
+        this.picture = photo.getFile();
+        this.caption = photo.getCaption();
+        this.filePath = photo.getFilePath();
+        this.name = photo.getName();
+        this.tags = new ArrayList<>(photo.getTags());
+    }
+
+
+
     public String getFilePath() {
-        return filePath;
+        return this.filePath;
+    }
+
+    public String setRelativePath(File file) {
+        Path basePath = Paths.get(System.getProperty("user.dir"));
+        Path filePath = Paths.get(file.getAbsolutePath());
+        Path relativePath = basePath.relativize(filePath);
+        return relativePath.toString();
     }
 
     public String getName() {
