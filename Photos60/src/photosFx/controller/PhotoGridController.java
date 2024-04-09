@@ -241,7 +241,7 @@ public class PhotoGridController implements Initializable {
             photoCaption.setText(caption);
         }
         photoDate.setText(formatter.format(photo.getDate()));
-        photoCover.setImage(new Image(photo.getFile().toURI().toString()));
+        photoCover.setImage(new Image("file:" + photo.getFilePath()));
         photoMap.put(photoCover, photo);
         populatePhoto = photo;
         return;
