@@ -8,6 +8,8 @@ import java.net.URL;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
+
+import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -34,6 +36,8 @@ public class AlbumsController implements Initializable {
     public static Content content;
     @FXML
     public Label status;
+    @FXML
+    public Button searchButton;
     @FXML
     private Label windowLabel;
 
@@ -70,7 +74,6 @@ public class AlbumsController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     private void displayData(List<Album> albums) {
@@ -170,7 +173,23 @@ public class AlbumsController implements Initializable {
     }
     @FXML
     private void handleCreateAlbumButtonClicked() {
+        Optional<String> result = openAlbumCreationDialog();
+        // lambda method:
+        // result.ifPresent(albumName -> content.albums.add(new Album(albumName)));
+        if (result.isPresent()) {
+            String albumName = result.get();
+            content.albums.add(new Album(albumName));
+        }
 
+        try {
+            ContentSerializer.saveContent(content, username);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        displayData(content.albums);
+    }
+
+    public static Optional<String> openAlbumCreationDialog() {
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Enter Album Name");
         dialog.setHeaderText(null);
@@ -178,8 +197,7 @@ public class AlbumsController implements Initializable {
 
         Optional<String> result = dialog.showAndWait();
 
-        result.ifPresent(albumName -> {
-            // Handle the entered album name here
+        if (result.isPresent()) {
             String enteredText = result.get().toUpperCase().strip();
 
             if (enteredText.equals("")) {
@@ -188,23 +206,18 @@ public class AlbumsController implements Initializable {
                 alert.setHeaderText(null);
                 alert.setContentText("Empty album name not allowed!");
                 alert.showAndWait();
-                return;
+                return Optional.empty();
             } else if (content.getAlbumNames().contains(enteredText)) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setHeaderText(null);
                 alert.setContentText("Album already exits!");
                 alert.showAndWait();
-                return;
+                return Optional.empty();
             }
-            content.albums.add(new Album(enteredText.toUpperCase()));
-            displayData(content.albums);
-            try {
-                ContentSerializer.saveContent(content, username);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
+        }
+
+        return result;
     }
 
     @FXML
@@ -303,5 +316,23 @@ public class AlbumsController implements Initializable {
             e.printStackTrace();
         }
     }
+    @FXML
+    public void search(ActionEvent actionEvent) {
+        try {
+            // Load the FXML file for the new scene
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/searchpage.fxml"));
+            Parent secondSceneRoot = loader.load();
 
+            // Create a new scene with the loaded FXML file
+            Scene secondScene = new Scene(secondSceneRoot, 800, 600);
+
+            // Get the stage from the button and set the new scene
+            Stage stage = (Stage) searchButton.getScene().getWindow();
+            stage.setScene(secondScene);
+            stage.setTitle("Search");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
 }

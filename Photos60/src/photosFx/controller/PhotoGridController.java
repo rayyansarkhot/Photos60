@@ -200,7 +200,6 @@ public class PhotoGridController implements Initializable {
         }
         Photo newPhoto = new Photo(file);
         if (currentAlbum != null) {
-            currentAlbum.addPhoto(newPhoto);
             if (!currentAlbum.doesPhotoExist(newPhoto)) {
                 currentAlbum.addPhoto(newPhoto);
                 refresh();
@@ -290,7 +289,6 @@ public class PhotoGridController implements Initializable {
         if (currentImage != null) {
             currentAlbum.removePhoto(currentImage);
             refresh();
-        }
         } else {noPhotoAlert();}
     }
     public void noPhotoAlert() {
