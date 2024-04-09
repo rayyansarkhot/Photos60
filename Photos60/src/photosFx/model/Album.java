@@ -14,12 +14,18 @@ public class Album implements Serializable {
     public List<Photo> photos;
     static final long serialVersionUID = 1L;
 
+    /** Constructor for Album. */
     public Album(String name) {
         this.name = name;
         this.numPhotos = 0;
         this.photos = new ArrayList<>();
     }
 
+    /**
+     * Constructor for Album.
+     * @param newAlbumName the name of the album
+     * @param photoSearchResultsArray the photos to add to the album
+     */
     public Album(String newAlbumName, ArrayList<Photo> photoSearchResultsArray) {
         this.name = newAlbumName;
         this.numPhotos = photoSearchResultsArray.size();
@@ -27,6 +33,11 @@ public class Album implements Serializable {
         updateDateRange();
     }
 
+    /**
+     * Checks if the photo already exists in the album.
+     * @param newPhoto the photo to check
+     * @return true if the photo already exists in the album, false otherwise
+     */
     public boolean doesPhotoExist(Photo newPhoto) {
         for (Photo photo : this.photos) {
             if (photo.getFilePath().equals(newPhoto.getFilePath())) {
@@ -45,6 +56,10 @@ public class Album implements Serializable {
         return name;
     }
 
+    /**
+     * Sets the name of the album.
+     * @param newName the name to set
+     */
     public void setName(String newName) {
         name = newName;
     }
@@ -53,6 +68,10 @@ public class Album implements Serializable {
         return numPhotos;
     }
 
+    /**
+     * Adds a photo to the album.
+     * @param photo the photo to add
+     */
     public void addPhoto(Photo photo) {
         if (!doesPhotoExist(photo)) {
             photos.add(photo);
@@ -61,6 +80,10 @@ public class Album implements Serializable {
         }
     }
 
+    /**
+     * Removes a photo from the album.
+     * @param photo the photo to remove
+     */
     public void removePhoto(Photo photo) {
         photos.remove(photo);
         numPhotos = photos.size();
@@ -77,11 +100,21 @@ public class Album implements Serializable {
         return earliestPhoto;
     }
 
+    /**
+     * Sets the earliest photo in the album.
+     * @param date the date to set
+     * @return the date set
+     */
     public Date setEarliestPhoto(Date date) {
         earliestPhoto = date;
         return earliestPhoto;
     }
 
+    /**
+     * Sets the latest photo in the album.
+     * @param date the date to set
+     * @return the date set
+     */
     public Date setLatestPhoto(Date date) {
         latestPhoto = date;
         return latestPhoto;

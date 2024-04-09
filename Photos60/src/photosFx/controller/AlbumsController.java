@@ -22,6 +22,7 @@ import photosFx.model.Album;
 import photosFx.model.ContentSerializer;
 import photosFx.model.Content;
 
+/** Albums view, which allows creation, deletion, and renaming of albums. */
 public class AlbumsController implements Initializable {
 
     public static String username = "";
@@ -68,6 +69,11 @@ public class AlbumsController implements Initializable {
         }
     }
 
+    /**
+     * Display the data in the TableView
+     *
+     * @param albums List of albums to display
+     */
     private void displayData(List<Album> albums) {
 
         tableView.getItems().clear();
@@ -90,6 +96,12 @@ public class AlbumsController implements Initializable {
         tableView.getItems().addAll(albums);
     }
 
+    /**
+     * Check if the user exists
+     *
+     * @param name Username
+     * @return true if the user exists, false otherwise
+     */
     public boolean userExists(String name) {
 
         String directoryPath = "src/photosFx/model/users";
@@ -107,6 +119,9 @@ public class AlbumsController implements Initializable {
 
     }
 
+    /**
+     * Handle the Rename Album button click event
+     */
     @FXML
     private void handleRenameAlbumButtonClicked() {
         Album selectedAlbum = tableView.getSelectionModel().getSelectedItem();
@@ -160,6 +175,9 @@ public class AlbumsController implements Initializable {
         }
     }
 
+    /**
+     * Save the content to the serialized user file (username.dat)
+     */
     public static void updateContent() {
         try {
             ContentSerializer.saveContent(content, username);
@@ -167,6 +185,9 @@ public class AlbumsController implements Initializable {
             e.printStackTrace();
         }
     }
+    /**
+     * Handle the Create Album button click event
+     */
     @FXML
     private void handleCreateAlbumButtonClicked() {
         Optional<String> result = openAlbumCreationDialog();
@@ -187,6 +208,11 @@ public class AlbumsController implements Initializable {
         displayData(content.albums);
     }
 
+    /**
+     * Open the Album Creation dialog
+     *
+     * @return Optional<String> containing the entered album name
+     */
     public static Optional<String> openAlbumCreationDialog() {
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Enter Album Name");
@@ -222,6 +248,9 @@ public class AlbumsController implements Initializable {
         return result;
     }
 
+    /**
+     * Handle the Delete Album button click event
+     */
     @FXML
     private void handleDeleteAlbumButtonClicked() {
         Album selectedAlbum = tableView.getSelectionModel().getSelectedItem();
@@ -246,6 +275,12 @@ public class AlbumsController implements Initializable {
         }
     }
 
+    /**
+     * Delete the selected album
+     *
+     * @param selectedAlbum Album to delete
+     * @return Name of the deleted album
+     */
     @FXML
     private String deleteAlbum(Album selectedAlbum) {
 
@@ -263,10 +298,9 @@ public class AlbumsController implements Initializable {
 
     }
 
-//    public void setStatusLabel(Label statusLabel) {
-//        this.status = statusLabel;
-//    }
-
+    /**
+     * Open the selected album
+     */
     @FXML
     private void openAlbum() {
         Album selectedAlbum = tableView.getSelectionModel().getSelectedItem();
@@ -306,6 +340,9 @@ public class AlbumsController implements Initializable {
         }
     }
 
+    /**
+     * Handle the Logout button click event
+     */
     @FXML
     private void handleLogoutButtonClicked() {
         try {
@@ -323,6 +360,10 @@ public class AlbumsController implements Initializable {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Handle the Search button click event
+     */
     @FXML
     public void search(ActionEvent actionEvent) {
         try {

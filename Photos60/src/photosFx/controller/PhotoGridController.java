@@ -24,17 +24,21 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.paint.Color;
-import javafx.scene.text.FontPosture;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import photosFx.model.Album;
 import photosFx.model.ContentSerializer;
 import photosFx.model.Photo;
+
 import static photosFx.controller.AlbumsController.content;
 import static photosFx.controller.AlbumsController.username;
 import photosFx.controller.BaseController.EditPhotoController;
 
+
+/**
+ * Controller for the photo grid view.
+ */
 public class PhotoGridController implements Initializable {
 
     @FXML
@@ -113,6 +117,9 @@ public class PhotoGridController implements Initializable {
     FlowPane photoScroll;
     @FXML
     AnchorPane anchorPane;
+    /**
+     * This method is called when the Login button is clicked. Makes the photos sorted and populates photo scroll
+     */
     public void refresh() {
         Album album = currentAlbum;
         List<Photo> photos = album.getPhotos();
@@ -146,6 +153,8 @@ public class PhotoGridController implements Initializable {
             e.printStackTrace();
         }
     }
+
+
     @FXML
     private void handleLogoutButtonClicked() {
         try {
@@ -186,6 +195,9 @@ public class PhotoGridController implements Initializable {
         this.currentAlbum = album;
     }
 
+    /**
+     * This method is called when the Add Photo button is clicked. Opens a file chooser to select a photo to add to the album
+     */
     @FXML
     public void addPhoto(ActionEvent actionEvent) throws IOException {
         fileChooser.setTitle("Select Picture");
@@ -213,6 +225,10 @@ public class PhotoGridController implements Initializable {
     SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
 
     private Map<ImageView, Photo> photoMap = new HashMap<>();
+
+    /**
+     * This method is called when the Edit Photo button is clicked. Opens the edit photo window
+     */
     public void setPhoto(Photo photo) {
         photoName.setText(photo.getName().substring(0, Math.min(photo.getName().length(), 17))
                 + (photo.getName().length() > 17 ? "..." : ""));
@@ -232,6 +248,9 @@ public class PhotoGridController implements Initializable {
 
     /* ------ methods for photo options ------ */
 
+    /**
+     * This method is called when the Edit Photo button is clicked. Opens the edit photo window
+     */
     public void editPhoto() throws IOException {
         System.out.println("edit photo clicked");
         if (currentImage != null) {
@@ -256,6 +275,9 @@ public class PhotoGridController implements Initializable {
     }
 
 
+    /**
+     * This method is called when the Open Slideshow button is clicked. Opens the slideshow window
+     */
     public void openSlideshow() throws IOException {
         System.out.println("open slideshow clicked");
         try {
@@ -291,6 +313,7 @@ public class PhotoGridController implements Initializable {
             refresh();
         } else {noPhotoAlert();}
     }
+
     public void noPhotoAlert() {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
@@ -299,6 +322,9 @@ public class PhotoGridController implements Initializable {
         alert.showAndWait();
     }
 
+    /**
+     * This method is called when the Copy Photo or Move Photo button is clicked. Opens a dialog to choose an album to copy or move the photo to
+     */
     private void transferPhoto(boolean isMoveOperation) throws IOException {
         System.out.println((isMoveOperation ? "move" : "copy") + " photo clicked");
         if (currentImage != null) {
@@ -364,6 +390,9 @@ public class PhotoGridController implements Initializable {
     }
 
 
+    /**
+     * This method is called when a photo is clicked. Highlights the selected photo
+     */
     public void selectedPhoto(MouseEvent mouseEvent) {
         ImageView imageView = (ImageView) mouseEvent.getSource();
         if (lastSelectedImage == imageView) {

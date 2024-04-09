@@ -22,6 +22,9 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Admin view, which allows creation and deletion of users.
+ */
 public class MainController {
 
     @FXML
@@ -29,6 +32,9 @@ public class MainController {
     @FXML
     private TextField usernameField;
 
+    /**
+     * This method is called when the Login button is clicked.
+     */
     @FXML
     private void handleLoginButtonClicked() {
         try {
@@ -54,6 +60,7 @@ public class MainController {
                 alert.setContentText("Empty username not allowed!");
                 alert.showAndWait();
             } else {
+                // Current username
                 AlbumsController.username = username;
 
                 // Load the FXML file for the new scene

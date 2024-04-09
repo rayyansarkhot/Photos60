@@ -10,6 +10,9 @@ public class Content implements Serializable {
 
     public List<Album> albums;
 
+    /**
+     * Sample test constructor for Content.
+     */
     public Content() {
         albums = new ArrayList<Album>(); // Initialize the list
         albums.add(new Album("RAYYAN"));
@@ -17,6 +20,10 @@ public class Content implements Serializable {
 
     }
 
+    /**
+     * Adds an album to the list of albums.
+     * @param album the album to add
+     */
     public List<String> getAlbumNames() {
 
         List<String> albumNames = new ArrayList<>();

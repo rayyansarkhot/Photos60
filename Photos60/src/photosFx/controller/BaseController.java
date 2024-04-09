@@ -25,6 +25,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 
+/**
+ * Base controller for the application, common method for slideshow, opening the photo, and editing captions and tags
+ */
 public class BaseController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
     }
@@ -37,6 +40,9 @@ public class BaseController implements Initializable {
         this.selectedPhoto = currentImage;
     }
 
+    /**
+     * Open the selected photo in the photo editor
+     */
     public static class EditPhotoController extends BaseController {
 
 
@@ -62,6 +68,9 @@ public class BaseController implements Initializable {
         private TableView<Tag> tagView;
 
 
+        /**
+         * Refresh the view with the selected photo's information
+         */
         public void refresh() {
             Photo photo = selectedPhoto;
             textField.setText(photo.getName());
@@ -90,6 +99,10 @@ public class BaseController implements Initializable {
             stage.close();
         }
 
+        /**
+         * Save changes to the photo's caption and tags (which is dynamically updated)
+         * @param actionEvent
+         */
         @FXML
         public void saveChanges(ActionEvent actionEvent) {
             AlbumsController.updateContent();
@@ -106,6 +119,10 @@ public class BaseController implements Initializable {
             stage.close();
         }
 
+        /**
+         * Create a new tag for the selected photo
+         * @param actionEvent
+         */
         @FXML
         public void createTag(ActionEvent actionEvent) {
 
@@ -154,6 +171,10 @@ public class BaseController implements Initializable {
 
         }
 
+        /**
+         * Delete the selected tag from the photo
+         * @param actionEvent
+         */
         @FXML
         public void deleteTag(ActionEvent actionEvent) {
             Tag selectedTag = tagView.getSelectionModel().getSelectedItem();
@@ -170,12 +191,19 @@ public class BaseController implements Initializable {
             }
         }
 
+        /**
+         * Change the caption of the selected photo
+         * @param newCaption
+         */
         public void changeCaption(String newCaption) {
             selectedPhoto.setCaption(newCaption);
             AlbumsController.updateContent();
             updateCaptionField();
         }
 
+        /**
+         * Update the caption field with the selected photo's caption
+         */
         private void updateCaptionField() {
             photoCaption.setText(selectedPhoto.getCaption());
         }
@@ -222,6 +250,9 @@ public class BaseController implements Initializable {
         }
     }
 
+    /**
+     * Controller for the slideshow view, only shows photo + name and allows for navigation
+     */
     public static class SlideshowController extends BaseController {
 
         @FXML
@@ -244,6 +275,10 @@ public class BaseController implements Initializable {
             imageView.setImage(new Image("file:" + photo.getFilePath()));
         }
 
+        /**
+         * Go to the previous photo in the album
+         * @param actionEvent
+         */
         @FXML
         public void goLeft(ActionEvent actionEvent) {
             System.out.println("go left selected");
@@ -262,6 +297,10 @@ public class BaseController implements Initializable {
             refresh();
         }
 
+        /**
+         * Go to the next photo in the album
+         * @param actionEvent
+         */
         @FXML
         public void goRight(ActionEvent actionEvent) {
             List<Photo> photos = album;
@@ -278,6 +317,10 @@ public class BaseController implements Initializable {
             refresh();
         }
 
+        /**
+         * Go back to the photo grid view
+         * @param actionEvent
+         */
         @FXML
         public void goBack(ActionEvent actionEvent) {
             try {
@@ -298,6 +341,10 @@ public class BaseController implements Initializable {
             }
         }
 
+        /**
+         * Set the current album to display
+         * @param sortedPhotos
+         */
         public void setCurrentAlbum(List<Photo> sortedPhotos) {
             this.album = sortedPhotos;
         }

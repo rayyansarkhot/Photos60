@@ -22,6 +22,11 @@ public class Photo implements Serializable {
     private List<Tag> tags;
 
 
+    /**
+     * Constructor for Photo.
+     * @param pic the photo file
+     * @throws IOException if an error occurs
+     */
     public Photo(File pic) throws IOException {
         if (pic != null) {
             this.filePath = setRelativePath(pic);
@@ -35,6 +40,13 @@ public class Photo implements Serializable {
         }
     }
 
+    /**
+     * Constructor for Photo.
+     * @param date the date of the photo
+     * @param pic the photo file
+     * @param caption the caption of the photo
+     * @param tags the tags of the photo
+     */
     public Photo(Photo photo) {
         this.date = photo.getDate();
         this.picture = photo.getFile();
@@ -50,6 +62,11 @@ public class Photo implements Serializable {
         return this.filePath;
     }
 
+    /**
+     * Sets the relative path of the photo.
+     * @param file the photo file
+     * @return the relative path
+     */
     public String setRelativePath(File file) {
         Path basePath = Paths.get(System.getProperty("user.dir"));
         Path filePath = Paths.get(file.getAbsolutePath());
@@ -89,6 +106,11 @@ public class Photo implements Serializable {
         return tags;
     }
 
+    /**
+     * Checks if the photo has a tag.
+     * @param tag the tag to check
+     * @return true if the photo has the tag, false otherwise
+     */
     public boolean hasTag(Tag tag) {
         for (Tag x : this.tags) {
             if (x.getTagName().toLowerCase().equals(tag.getTagName().toLowerCase())

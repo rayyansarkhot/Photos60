@@ -28,6 +28,9 @@ import photosFx.model.Album;
 import photosFx.model.Content;
 import photosFx.model.ContentSerializer;
 
+/**
+ * Admin view, which allows creation and deletion of users.
+ */
 public class AdminController implements Initializable {
     @FXML
     private Button logoutButton;

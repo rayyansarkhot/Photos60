@@ -11,6 +11,11 @@ public class Tag implements Serializable {
 
     private String tagValue;
 
+    /**
+     * Constructor for Tag.
+     * @param tagName the name of the tag
+     * @param tagValue the value of the tag
+     */
     public Tag(String tagName, String tagValue) {
         this.tagName = tagName;
         this.tagValue = tagValue;
@@ -24,6 +29,10 @@ public class Tag implements Serializable {
         return this.tagValue;
     }
 
+    /**
+     * Returns the tag in the format "tagName: tagValue".
+     * @return the tag in the format "tagName: tagValue"
+     */
     public boolean equals(Object t) {
         if (t instanceof Tag) {
             Tag tag = (Tag) t;

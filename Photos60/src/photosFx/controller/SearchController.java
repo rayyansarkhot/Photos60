@@ -24,7 +24,9 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 
 import static photosFx.controller.AlbumsController.content;
-
+/**
+ * Controller for the search view.
+ */
 public class SearchController implements Initializable {
     @FXML
     public ChoiceBox andOrSelect;
@@ -45,6 +47,9 @@ public class SearchController implements Initializable {
 
     ArrayList<Photo> photoSearchResultsArray = new ArrayList<Photo>();
 
+    /**
+     * Initializes the controller class.
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         andOrSelect.getItems().addAll(" ", "AND", "OR");
@@ -70,6 +75,9 @@ public class SearchController implements Initializable {
         refresh();
     }
 
+    /**
+     * Refreshes the search results list view.
+     */
     public void refresh() {
         observablePhotoSearchResultsArray.clear();
         ArrayList<String> photoDetails = new ArrayList<String>();
@@ -81,6 +89,11 @@ public class SearchController implements Initializable {
         searchResults.refresh();
     }
 
+    /**
+     * Searches for photos based on the tags entered by the user.
+     *
+     * @param e ActionEvent
+     */
     public void searchByTag(ActionEvent e) {
         String man1name = firstKey.getText().trim();
         String man1value = firstValue.getText().trim();
@@ -99,7 +112,6 @@ public class SearchController implements Initializable {
         Tag tag1 = new Tag(man1name, man1value);
         searchTags.add(tag1);
         Object selectedValue = andOrSelect.getValue();
-
 
         if (man2name.isEmpty() || man2value.isEmpty()) {
             if (!selectedValue.equals(" ")) {
@@ -121,6 +133,12 @@ public class SearchController implements Initializable {
         refresh();
     }
 
+    /**
+     * Conjunction search for photos based on the tags entered by the user.
+     *
+     * @param searchTags ArrayList<Tag>
+     * @return ArrayList<Photo>
+     */
     public ArrayList<Photo> andTagSearch(ArrayList<Tag> searchTags) {
         ArrayList<Photo> results = new ArrayList<Photo>();
         HashSet<Photo> noDuplicates = new HashSet<Photo>();
@@ -144,6 +162,12 @@ public class SearchController implements Initializable {
         return results;
     }
 
+    /**
+     * Disjunction search for photos based on the tags entered by the user.
+     *
+     * @param searchTags ArrayList<Tag>
+     * @return ArrayList<Photo>
+     */
     public ArrayList<Photo> orTagSearch(ArrayList<Tag> searchTags) {
         ArrayList<Photo> results = new ArrayList<Photo>();
         HashSet<Photo> noDuplicates = new HashSet<Photo>();
@@ -163,7 +187,12 @@ public class SearchController implements Initializable {
         return results;
     }
 
-
+    /**
+     * Searches for photos based on the date range entered by the user.
+     *
+     * @param e ActionEvent
+     * @throws ParseException
+     */
     public void searchByDate(ActionEvent e) throws ParseException {
         String dateBeginning = pickStartDate.getValue().toString();
         String dateEnd = pickToDate.getValue().toString();
@@ -204,6 +233,13 @@ public class SearchController implements Initializable {
 
     }
 
+    /**
+     * Retrieves photos that fall within the date range entered by the user.
+     *
+     * @param date1 Date
+     * @param date2 Date
+     * @return ArrayList<Photo>
+     */
     public ArrayList<Photo> getPhotosInRange(Date date1, Date date2) {
         ArrayList<Photo> results = new ArrayList<Photo>();
         for (Album album : content.albums) {
@@ -221,6 +257,11 @@ public class SearchController implements Initializable {
         return results;
     }
 
+    /**
+     * Saves the search results as a new album.
+     *
+     * @param e ActionEvent
+     */
     public void saveResultsAsAlbum(ActionEvent e) {
         if (photoSearchResultsArray.size() == 0) {
             Alert alert = new Alert(AlertType.ERROR);
@@ -246,6 +287,11 @@ public class SearchController implements Initializable {
         AlbumsController.updateContent();
     }
 
+    /**
+     * Logs the user out of the application.
+     *
+     * @param actionEvent ActionEvent
+     */
     public void handleLogoutButtonClicked(ActionEvent actionEvent) {
         try {
             // Load the FXML file for the new scene
