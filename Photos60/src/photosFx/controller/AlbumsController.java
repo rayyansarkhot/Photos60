@@ -1,9 +1,7 @@
 package photosFx.controller;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.net.URL;
 import java.util.List;
 import java.util.Optional;
@@ -13,18 +11,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.TextInputDialog;
-import java.util.Optional;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 import photosFx.model.Album;
 import photosFx.model.ContentSerializer;
@@ -137,13 +129,17 @@ public class AlbumsController implements Initializable {
                     alert.setContentText("Empty album name not allowed!");
                     alert.showAndWait();
                     return;
-                } else if (content.getAlbumNames().contains(enteredText)) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Error");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Album already exists!");
-                    alert.showAndWait();
-                    return;
+                } else {
+                    boolean albumExists = content.getAlbumNames().stream()
+                            .anyMatch(existingAlbumName -> existingAlbumName.equalsIgnoreCase(enteredText));
+                    if (albumExists) {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Error");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Album already exists!");
+                        alert.showAndWait();
+                        return;
+                    }
                 }
 
                 selectedAlbum.setName(enteredText.toUpperCase());
@@ -174,6 +170,7 @@ public class AlbumsController implements Initializable {
     @FXML
     private void handleCreateAlbumButtonClicked() {
         Optional<String> result = openAlbumCreationDialog();
+
         // lambda method:
         // result.ifPresent(albumName -> content.albums.add(new Album(albumName)));
         if (result.isPresent()) {
@@ -186,6 +183,7 @@ public class AlbumsController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         displayData(content.albums);
     }
 
@@ -207,13 +205,17 @@ public class AlbumsController implements Initializable {
                 alert.setContentText("Empty album name not allowed!");
                 alert.showAndWait();
                 return Optional.empty();
-            } else if (content.getAlbumNames().contains(enteredText)) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText(null);
-                alert.setContentText("Album already exits!");
-                alert.showAndWait();
-                return Optional.empty();
+            } else {
+                boolean albumExists = content.getAlbumNames().stream()
+                        .anyMatch(existingAlbumName -> existingAlbumName.equalsIgnoreCase(enteredText));
+                if (albumExists) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Album already exits!");
+                    alert.showAndWait();
+                    return Optional.empty();
+                }
             }
         }
 
@@ -261,6 +263,10 @@ public class AlbumsController implements Initializable {
 
     }
 
+//    public void setStatusLabel(Label statusLabel) {
+//        this.status = statusLabel;
+//    }
+
     @FXML
     private void openAlbum() {
         Album selectedAlbum = tableView.getSelectionModel().getSelectedItem();
@@ -277,6 +283,7 @@ public class AlbumsController implements Initializable {
             // Load the FXML file for the new scene
             FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/photogrid.fxml"));
             Parent secondSceneRoot = loader.load();
+
 
             // Create a new scene with the loaded FXML file
             Scene secondScene = new Scene(secondSceneRoot, 800, 600);
